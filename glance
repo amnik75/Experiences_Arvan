@@ -1,0 +1,25 @@
+Virtual machine images come in different formats. A format describes the way the bits making up a file are arranged on the storage medium. Knowledge of a format is 
+required in order for a consumer to interpret the content of the file correctly (rather than to simply view it as a bunch of bits).
+When considering a stored virtual machine image, there are two types of format that can come into play.
+container format
+The stored file may be a container that contains the virtual disk. For example, the virtual disk may be contained in a tar file which must be opened before the 
+disk can be retrieved. It’s possible, however, that the virtual disk is not contained in a file, but is just stored as-is by the Image Service.
+disk format
+The virtual disk itself has its bits arranged in some format. A consuming service must know what this format is before it can effectively use the virtual disk.
+
+Image metadata (also known as “image properties”) provide information about the virtual disk stored by the Image service. The metadata is stored as part of 
+the image record associated with the image data by the Image service. Image metadata can help end users determine the nature of an image, and is used by associated 
+OpenStack components and drivers which interface with the Image service.
+
+Image metadata can also determine the scheduling of hosts. If specific metadata are set on an image (possible metadata are architecture, hypervisor type, and 
+virtual machine mode), and Compute is configured so that the ImagePropertiesFilter scheduler filter is enabled (default), then the scheduler only considers compute 
+hosts that satisfy the specified properties.
+
+Images are not the only OpenStack resource that can have metadata associated with them. Many other resources (for example, volumes) support setting metadata on the 
+resources. As with images, the metadata may be consumed by humans to understand something about the resource, or may be used by other OpenStack services so that 
+they can make efficient use of the resource (for example, the nova filter scheduler using the image architecture property to determine an appropriate host on which 
+to build an instance from that image). Thus it is important that there be a discoverable way for people and services to determine what metadata properties and 
+values are available throughout an OpenStack cloud.
+To facilitate this, Glance (the OpenStack Image service) hosts a metadata definition service, which is also known as the OpenStack metadefs catalog.
+There is no special relationship between the Image service and the Metadefs service. If you want to apply the keys and values defined in the Metadefs service to 
+images, you must use the Image service API or client tools just as you would for any other OpenStack service.
